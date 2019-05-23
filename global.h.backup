@@ -1,0 +1,66 @@
+#ifndef GLOBAL_H
+#define GLOBAL_H
+#include <QDateTime>
+
+//struct Candlestick {
+//    QDateTime openTime;
+//    double open;
+//    double high;
+//    double low;
+//    double close;
+//    double volume;
+//    QDateTime closeTime;
+//    double quote;
+//    int trades;
+//    double sma;
+//    double sma2;
+//    double sma3;
+//    double rsi;
+//};
+
+//#define MINIMUMPRICE 150.0
+#define KOMMISION   0.075
+//#define BET         10.01
+
+struct SMA_data {
+    QList<double> list;
+    int size;
+    int offset;
+};
+
+
+struct Kline {
+    qint64     t;      // Kline start time
+    qint64     T;      // Kline close time
+    QString     s;      // Symbol
+    QString     i;      // Interval
+    int         f;      // First trade ID
+    int         L;      // Last trade ID
+    double      o;      // Open price
+    double      c;      // Close price
+    double      h;      // High price
+    double      l;      // Low price
+    double      v;      // Base asset volume
+    int         n;      // Number of trades
+    bool        x;      // Is this kline closed?
+    double      q;      // Quote asset volume
+    double      V;      // Taker buy base asset volume
+    double      Q;      // Taker buy quote asset volume
+    QString     B;      // Ignore
+};
+
+struct CandLestick {
+    QString     e;      // Event type
+    quint64     E;      // Event time
+    QString     s;      // Symbol
+    Kline       k;
+    double      sma1;
+    double      sma2;
+    double      sma3;
+    double      macd;
+    double      historgram;
+    double      signal;
+    double      rsi;
+};
+
+#endif // GLOBAL_H

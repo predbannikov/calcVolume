@@ -96,7 +96,7 @@
        <item row="1" column="0" colspan="2">
         <widget class="QLineEdit" name="lePair">
          <property name="text">
-          <string>NEOETH</string>
+          <string>QKCBTC</string>
          </property>
         </widget>
        </item>
@@ -111,12 +111,12 @@
         <widget class="QDateTimeEdit" name="dtStartHistory">
          <property name="dateTime">
           <datetime>
-           <hour>0</hour>
+           <hour>3</hour>
            <minute>0</minute>
            <second>0</second>
            <year>2019</year>
            <month>5</month>
-           <day>6</day>
+           <day>21</day>
           </datetime>
          </property>
         </widget>
@@ -184,7 +184,7 @@
      <x>0</x>
      <y>0</y>
      <width>1117</width>
-     <height>20</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

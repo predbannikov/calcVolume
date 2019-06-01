@@ -181,7 +181,7 @@ bool MainWindow::parsAllMyTrades(QByteArray array)
 
         tradesList.append(trPair);
     }
-    int count = 0;
+    count = 0;
     for(int i = 0; i < tradesList.size(); i++)
     {
         QString type;
@@ -192,16 +192,32 @@ bool MainWindow::parsAllMyTrades(QByteArray array)
                                  .arg(tradesList[i].origQty, -15)
                                  .arg(tradesList[i].cummulativeQuoteQty, -15)
                                  .arg(tradesList[i].side, 7)
-                                 .arg(tradesList[i].time.toString("dd:MM:yy"))
+                                 .arg(tradesList[i].time.toString("dd:MM:yy hh:mm:ss"))
                                  .arg(tradesList[i].status, 10));
-            count++;
+            if(tradesList[i].status == "FILLED")
+                count++;
             filledTrades.prepend(tradesList[i]);
 
         } else if(tradesList[i].status != "CANCELED"){
-            qDebug() << tradesList[i].status;
+            //qDebug() << tradesList[i].status;
         }
     }
     return true;
+}
+
+double MainWindow::parsCurPrice(QByteArray array)
+{
+    QJsonParseError parsError;
+    QJsonDocument document = QJsonDocument::fromJson(array, &parsError);
+    if(parsError.error != QJsonParseError::NoError)
+    {
+        qDebug() << "DataUserStream::sockMsgReceived::parsError = " << parsError.errorString();
+        qDebug() << array;
+        return 0;
+    }
+    QJsonObject obj = document.object();
+
+    return (obj["bidPrice"].toString().toDouble() + obj["askPrice"].toString().toDouble()) / 2.;
 }
 
 void MainWindow::on_pushButton_2_clicked()
@@ -272,11 +288,11 @@ void MainWindow::on_pushButton_8_clicked()
             base = QString::number(base.toDouble() + filledTrades[i].origQty.toDouble());
             quote = QString::number(quote.toDouble() - filledTrades[i].cummulativeQuoteQty.toDouble());
             volume = QString::number(volume.toDouble() + filledTrades[i].cummulativeQuoteQty.toDouble());
-        }
-        else {
+        } else {
             base = QString::number(base.toDouble() - filledTrades[i].origQty.toDouble());
-            quote = QString::number(quote.toDouble() + filledTrades[i].cummulativeQuoteQty.toDouble());        }
+            quote = QString::number(quote.toDouble() + filledTrades[i].cummulativeQuoteQty.toDouble());
             volume = QString::number(volume.toDouble() + filledTrades[i].cummulativeQuoteQty.toDouble());
+        }
     }
     commission = QString::number(volume.toDouble() / 100.0 * 0.075);
     qDebug() << "quote=" << quote << " base=" << base << " commission=" << commission << " volume=" << volume;
@@ -293,7 +309,7 @@ void MainWindow::on_pushButton_8_clicked()
 //    QString needPrice = QString::number(totalSpent.toDouble() / base.toDouble());
     qDebug() << ui->lePair->text() << "totalProfit =" << totalProfit;
     ui->textEdit->append("totalProfit =" + totalProfit);
-
+    qDebug() << "at current prices" <<  QString::number(parsCurPrice(binacpp->getBookTicker(ui->lePair->text().toUtf8())) * base.toDouble()) << " count trades =" << count;
 //    QString totalSpent;
 //    if(quote.toDouble() < 0)
 //        totalSpent = QString::number(quote.toDouble() * -1.0);

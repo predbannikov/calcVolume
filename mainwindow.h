@@ -48,7 +48,9 @@ private:
     bool loadConfig(MessageProcess &msgProc);
     void getAllTradesOfPair();
     bool parsAllMyTrades(QByteArray array);
+    double parsCurPrice(QByteArray array);
 
+    int count;
     QFile configFile;
     QByteArray downloadCandle(QString dtStart, QString dtEnd, QString req);
     UserData userData;
